@@ -679,7 +679,7 @@ local Tab = Window.NewTab("autofarm")
 local Section = Tab.NewSection("autofarm")
 
 --//Toggles
-local EnabledToggle = Section.NewToggle("autofarm fishman",function(bool)
+local EnabledToggle = Section.NewToggle("Auto Farm",function(bool)
 local lp = game.Players.LocalPlayer
 local function getNPC()
     local dist, thing = math.huge
@@ -694,10 +694,10 @@ local function getNPC()
     end
     return thing
 end
- 
-local TweenService  = game:GetService("TweenService")
-local noclipE       = false
-local antifall      = false
+
+local TweenService = game:GetService("TweenService")
+local noclipE = false
+local antifall = false
  
 local function noclip()
     for i, v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
@@ -714,7 +714,7 @@ local function moveto(obj, speed)
  
     if not game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyVelocity") then
         antifall = Instance.new("BodyVelocity", game.Players.LocalPlayer.Character.HumanoidRootPart)
-        antifall.Velocity = Vector3.new(0,-6,0)
+        antifall.Velocity = Vector3.new(0,-13,0)
         noclipE = game:GetService("RunService").Stepped:Connect(noclip)
         tween:Play()
     end
@@ -728,7 +728,7 @@ end
 getgenv().bandit = bool --Toggle here
 while bandit do task.wait()
     pcall(function()
-        moveto(getNPC().HumanoidRootPart.CFrame + Vector3.new(0,-6,0), 100)
+        moveto(getNPC().HumanoidRootPart.CFrame + Vector3.new(0,-13,0), 50)
         game:GetService("VirtualUser"):ClickButton1(Vector2.new(9e9, 9e9))
     end)
 end
