@@ -1,0 +1,907 @@
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/jncashhchisdhhuijlc/uilib/main/uilibsa"))()
+Window = Library.Main("Thunder HUB arsenal","RightControl") -- change "LeftAlt" to key that you want will hide gui
+
+
+--//tab
+local Tab = Window.NewTab("Main")
+
+
+--//section
+local Section = Tab.NewSection("Main")
+
+
+--// Button
+local Button = Section.NewButton("Noclip toggle X",function()
+local StealthMode = true -- If game has an anticheat that checks the logs
+
+local Indicator
+
+if not StealthMode then
+    local ScreenGui = Instance.new("ScreenGui", game.CoreGui)
+    print("NOCLIP: Press X to Activate")
+    Indicator = Instance.new("TextLabel", ScreenGui)
+    Indicator.AnchorPoint = Vector2.new(0, 1)
+    Indicator.Position = UDim2.new(0, 0, 1, 0)
+    Indicator.Size = UDim2.new(0, 200, 0, 50)
+    Indicator.BackgroundTransparency = 1
+    Indicator.TextScaled = true
+    Indicator.TextStrokeTransparency = 0
+    Indicator.TextColor3 = Color3.new(0, 0, 0)
+    Indicator.TextStrokeColor3 = Color3.new(1, 1, 1)
+    Indicator.Text = "Noclip: Enabled"
+end
+
+local noclip = false
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+
+local mouse = player:GetMouse()
+
+mouse.KeyDown:Connect(function(key)
+    if key == "x" then
+        noclip = not noclip
+
+        if not StealthMode then
+            Indicator.Text = "Noclip: " .. (noclip and "Enabled" or "Disabled")
+        end
+    end
+end)
+
+while true do
+    player = game.Players.LocalPlayer
+    character = player.Character
+
+    if noclip then
+        for _, v in pairs(character:GetDescendants()) do
+            pcall(function()
+                if v:IsA("BasePart") then
+                    v.CanCollide = false
+                end
+            end)
+        end
+    end
+
+    game:GetService("RunService").Stepped:wait()
+end
+end)
+
+--// Button
+local Button = Section.NewButton("Fly toggle P",function()
+repeat wait() 
+	until game.Players.LocalPlayer and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:findFirstChild("Head") and game.Players.LocalPlayer.Character:findFirstChild("Humanoid") 
+local mouse = game.Players.LocalPlayer:GetMouse() 
+repeat wait() until mouse
+local plr = game.Players.LocalPlayer 
+local torso = plr.Character.Head 
+local flying = false
+local deb = true 
+local ctrl = {f = 0, b = 0, l = 0, r = 0} 
+local lastctrl = {f = 0, b = 0, l = 0, r = 0} 
+local maxspeed = 80 -- speed
+local speed = 80 -- speed
+
+function Fly() 
+local bg = Instance.new("BodyGyro", torso) 
+bg.P = 9e4 
+bg.maxTorque = Vector3.new(9e9, 9e9, 9e9) 
+bg.cframe = torso.CFrame 
+local bv = Instance.new("BodyVelocity", torso) 
+bv.velocity = Vector3.new(0,0.1,0) 
+bv.maxForce = Vector3.new(9e9, 9e9, 9e9) 
+repeat wait() 
+plr.Character.Humanoid.PlatformStand = true 
+if ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0 then 
+speed = speed+.5+(speed/maxspeed) 
+if speed > maxspeed then 
+speed = maxspeed 
+end 
+elseif not (ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0) and speed ~= 0 then 
+speed = speed-1 
+if speed < 0 then 
+speed = 0 
+end 
+end 
+if (ctrl.l + ctrl.r) ~= 0 or (ctrl.f + ctrl.b) ~= 0 then 
+bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (ctrl.f+ctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(ctrl.l+ctrl.r,(ctrl.f+ctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed 
+lastctrl = {f = ctrl.f, b = ctrl.b, l = ctrl.l, r = ctrl.r} 
+elseif (ctrl.l + ctrl.r) == 0 and (ctrl.f + ctrl.b) == 0 and speed ~= 0 then 
+bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (lastctrl.f+lastctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(lastctrl.l+lastctrl.r,(lastctrl.f+lastctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed 
+else 
+bv.velocity = Vector3.new(0,0.1,0) 
+end 
+bg.cframe = game.Workspace.CurrentCamera.CoordinateFrame * CFrame.Angles(-math.rad((ctrl.f+ctrl.b)*50*speed/maxspeed),0,0) 
+until not flying 
+ctrl = {f = 0, b = 0, l = 0, r = 0} 
+lastctrl = {f = 0, b = 0, l = 0, r = 0} 
+speed = 0 
+bg:Destroy() 
+bv:Destroy() 
+plr.Character.Humanoid.PlatformStand = false 
+end 
+mouse.KeyDown:connect(function(key) 
+if key:lower() == "p" then -- toggle 
+if flying then flying = false 
+else 
+flying = true 
+Fly() 
+end 
+elseif key:lower() == "w" then 
+ctrl.f = 1 
+elseif key:lower() == "s" then 
+ctrl.b = -1 
+elseif key:lower() == "a" then 
+ctrl.l = -1 
+elseif key:lower() == "d" then 
+ctrl.r = 1 
+end 
+end) 
+mouse.KeyUp:connect(function(key) 
+if key:lower() == "w" then 
+ctrl.f = 0 
+elseif key:lower() == "s" then 
+ctrl.b = 0 
+elseif key:lower() == "a" then 
+ctrl.l = 0 
+elseif key:lower() == "d" then 
+ctrl.r = 0 
+end 
+end)
+Fly()
+end)
+
+
+--// Button
+local Button = Section.NewButton("Walkspeed Toggle Z",function()
+local Player = game:GetService'Players'.LocalPlayer;
+local UIS = game:GetService'UserInputService';
+UIS.InputBegan:connect(function(UserInput)
+        if UserInput.UserInputType == Enum.UserInputType.Keyboard and UserInput.KeyCode == Enum.KeyCode.Z then --first toggle
+            _G.Running = true
+                while wait(0.005) and _G.Running == true do
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.lookVector * 1
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.lookVector * 1
+end
+        end
+end)
+UIS.InputEnded:connect(function(UserInput)
+        if UserInput.UserInputType == Enum.UserInputType.Keyboard and UserInput.KeyCode == Enum.KeyCode.Z then --second toggle
+                _G.Running = false
+        end
+end)
+end)
+
+
+
+--// Button
+local Button = Section.NewButton("godmode (no dmg)",function()
+local player = game.Players.LocalPlayer
+
+if player.Character then
+
+if player.Character:FindFirstChild("Humanoid") then
+
+player.Character.Humanoid.Name = "1"
+
+end
+
+local l = player.Character["1"]:Clone()
+
+l.Parent = player.Character
+
+l.Name = "Humanoid"; wait(0.1)
+
+player.Character["1"]:Destroy()
+
+workspace.CurrentCamera.CameraSubject = player.Character.Humanoid
+
+player.Character.Animate.Disabled = true; wait(0.1)
+
+player.Character.Animate.Disabled = false
+
+end
+end)
+
+--// Button
+local Button = Section.NewButton("Invisible",function()
+local removeNametags = false -- remove custom billboardgui nametags from hrp, could trigger anticheat
+local plr = game:GetService("Players").LocalPlayer
+local character = plr.Character
+local hrp = character.HumanoidRootPart
+local old = hrp.CFrame
+if not character:FindFirstChild("LowerTorso") or character.PrimaryPart ~= hrp then
+return print("unsupported")
+end
+if removeNametags then
+local tag = hrp:FindFirstChildOfClass("BillboardGui")
+if tag then tag:Destroy() end
+hrp.ChildAdded:Connect(function(item)
+if item:IsA("BillboardGui") then
+task.wait()
+item:Destroy()
+end
+end)
+end
+local newroot = character.LowerTorso.Root:Clone()
+hrp.Parent = workspace
+character.PrimaryPart = hrp
+character:MoveTo(Vector3.new(old.X,9e9,old.Z))
+hrp.Parent = character
+task.wait(0.5)
+newroot.Parent = hrp
+hrp.CFrame = old
+end)
+
+--// Button
+local Button = Section.NewButton("Silent AIM",function()
+local CurrentCamera = workspace.CurrentCamera
+local Players = game.Players
+local LocalPlayer = Players.LocalPlayer
+local Mouse = LocalPlayer:GetMouse()
+function ClosestPlayer()
+    local MaxDist, Closest = math.huge
+    for I,V in pairs(Players.GetPlayers(Players)) do
+        if V == LocalPlayer then continue end
+        if V.Team == LocalPlayer then continue end
+        if not V.Character then continue end
+        local Head = V.Character.FindFirstChild(V.Character, "Head")
+        if not Head then continue end
+        local Pos, Vis = CurrentCamera.WorldToScreenPoint(CurrentCamera, Head.Position)
+        if not Vis then continue end
+        local MousePos, TheirPos = Vector2.new(workspace.CurrentCamera.ViewportSize.X / 2, workspace.CurrentCamera.ViewportSize.Y / 2), Vector2.new(Pos.X, Pos.Y)
+        local Dist = (TheirPos - MousePos).Magnitude
+        if Dist < MaxDist then
+            MaxDist = Dist
+            Closest = V
+        end
+    end
+    return Closest
+end
+local MT = getrawmetatable(game)
+local OldNC = MT.__namecall
+local OldIDX = MT.__index
+setreadonly(MT, false)
+MT.__namecall = newcclosure(function(self, ...)
+    local Args, Method = {...}, getnamecallmethod()
+    if Method == "FindPartOnRayWithIgnoreList" and not checkcaller() then
+        local CP = ClosestPlayer()
+        if CP and CP.Character and CP.Character.FindFirstChild(CP.Character, "Head") then
+            Args[1] = Ray.new(CurrentCamera.CFrame.Position, (CP.Character.Head.Position - CurrentCamera.CFrame.Position).Unit * 1000)
+            return OldNC(self, unpack(Args))
+        end
+    end
+    return OldNC(self, ...)
+end)
+MT.__index = newcclosure(function(self, K)
+    if K == "Clips" then
+        return workspace.Map
+    end
+    return OldIDX(self, K)
+end)
+setreadonly(MT, true)
+end)
+
+
+--// Button
+local Button = Section.NewButton("Legit wallbang",function(wallbang)
+_G.Enable = wallbang
+local MT = getrawmetatable(game)
+local OldIndex = MT.__index
+setreadonly(MT, false)
+MT.__index = newcclosure(function(A, B)
+    if B == "Clips" then
+        if _G.Enable then
+            return workspace.Map
+        end
+    end
+    return OldIndex(A, B)
+end)
+game:GetService("UserInputService").InputBegan:Connect(function(Key, _)
+    if not _ and Key.KeyCode == Enum.KeyCode.T then
+        _G.Enable = not _G.Enable
+    end
+end)
+end)
+
+
+--//Toggles
+local EnabledToggle = Section.NewToggle("Aimbot",function(aimbot)
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local GuiService = game:GetService("GuiService")
+local LocalPlayer = Players.LocalPlayer
+local Mouse = LocalPlayer:GetMouse()
+local Camera = workspace.CurrentCamera
+local sc = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+
+local Down = true
+local Inset = GuiService:GetGuiInset()
+
+--// Options \\--
+getgenv().Options = {
+    Enabled = aimbot,
+    TeamCheck = true,
+    Triggerbot = true,
+    Smoothness = true,
+    AimPart = "Head",
+    FOV = 150
+}
+
+--// Functions \\--
+local gc = function()
+	local nearest = math.huge
+	local nearplr
+	for i, v in pairs(game:GetService("Players"):GetPlayers()) do
+		if v ~= game:GetService("Players").LocalPlayer and v.Character and v.Character:FindFirstChild(Options.AimPart) then
+			if Options.TeamCheck then
+				if game:GetService("Players").LocalPlayer.Team ~= v.Team then
+                    local pos = Camera:WorldToScreenPoint(v.Character[Options.AimPart].Position)
+                    local diff = math.sqrt((pos.X - sc.X) ^ 2 + (pos.Y + Inset.Y - sc.Y) ^ 2)
+                    if diff < nearest and diff < Options.FOV then
+                        nearest = diff
+                        nearplr = v
+                    end
+                end
+			else
+				local pos = Camera:WorldToScreenPoint(v.Character[Options.AimPart].Position)
+				local diff = math.sqrt((pos.X - sc.X) ^ 2 + (pos.Y + Inset.Y - sc.Y) ^ 2)
+				if diff < nearest and diff < Options.FOV then
+					nearest = diff
+					nearplr = v
+                end
+			end
+		end
+	end
+	return nearplr
+end -- google chrome made this but i modified it for it to use teamcheck
+
+function Circle()
+    local circ = Drawing.new('Circle')
+    circ.Transparency = 1
+    circ.Thickness = 1.5
+    circ.Visible = true
+    circ.Color = Color3.fromRGB(255,255,255)
+	circ.Filled = false
+	circ.NumSides = 150
+    circ.Radius = Options.FOV
+    return circ
+end
+curc = Circle()
+--// Main \\--
+UserInputService.InputBegan:Connect(function( input )
+    if input.UserInputType == Enum.UserInputType.MouseButton2 then
+        Down = true
+	end
+end)
+UserInputService.InputEnded:Connect(function( input )
+    if input.UserInputType == Enum.UserInputType.MouseButton2 then
+        Down = false
+    end
+end)
+RunService.RenderStepped:Connect(function( ... )
+    if Options.Enabled then
+        if Down then
+            if gc() ~= nil and gc().Character:FindFirstChild(Options.AimPart) then
+                if Options.Smoothness then
+                    pcall(function( ... )
+                        local Info = TweenInfo.new(0.05,Enum.EasingStyle.Linear,Enum.EasingDirection.Out)
+                        game:GetService("TweenService"):Create(Camera,Info,{
+                            CFrame = CFrame.new(Camera.CFrame.p,gc().Character[Options.AimPart].CFrame.p)
+                        }):Play()
+                    end)
+                else
+                    pcall(function()
+                        Camera.CFrame = CFrame.new(Camera.CFrame.p,gc().Character[Options.AimPart].CFrame.p)
+                    end)
+                end
+            end
+        end
+        curc.Visible = false
+        curc.Position = Vector2.new(Mouse.X, Mouse.Y+Inset.Y)
+    else
+        -- do nothing except remove the fov
+        curc.Visible = false
+    end
+end)
+end,false) -- "true" is the default value of toggle
+
+--//tab
+local Tab = Window.NewTab("Gun Mods")
+
+
+--//section
+local Section = Tab.NewSection("Gun mods")
+
+
+--// Button
+local Button = Section.NewButton("Rapid Fire",function()
+local replicationstorage = game.ReplicatedStorage
+
+for i, v in pairs(replicationstorage.Weapons:GetDescendants()) do
+   if v.Name == "Auto" then
+       v.Value = true
+   end
+   if v.Name == "RecoilControl" then
+       v.Value = 0
+   end
+   if v.Name == "MaxSpread" then
+       v.Value = 0
+   end
+   if v.Name == "ReloadTime" then
+      v.Value = 0
+   end
+   if v.Name == "FireRate" then
+       v.Value = 0.05
+   end
+   if v.Name == "Crit" then
+       v.Value = 20
+   end
+end
+end)
+
+--// Button
+local Button = Section.NewButton("RGB gun",function()
+local c = 1 function zigzag(X)  return math.acos(math.cos(X * math.pi)) / math.pi end game:GetService("RunService").RenderStepped:Connect(function()  if game.Workspace.Camera:FindFirstChild('Arms') then   for i,v in pairs(game.Workspace.Camera.Arms:GetDescendants()) do    if v.ClassName == 'MeshPart' then      v.Color = Color3.fromHSV(zigzag(c),1,1)     c = c + .0001    end   end  end end)
+end)
+
+
+--// Button
+local Button = Section.NewButton("Infinite Ammo",function()
+    while wait() do
+        game:GetService("Players").LocalPlayer.PlayerGui.GUI.Client.Variables.ammocount.Value = 999
+        game:GetService("Players").LocalPlayer.PlayerGui.GUI.Client.Variables.ammocount2.Value = 999
+    end
+end)
+
+
+--//tab
+local Tab = Window.NewTab("ESP")
+
+
+--//section
+local Section = Tab.NewSection("ESP")
+
+
+
+--// Button
+local Button = Section.NewButton("Charms",function()
+local players = game.Players:GetPlayers()
+
+for i,v in pairs(players) do
+ local esp = Instance.new("Highlight")
+ esp.Name = v.Name
+ esp.FillTransparency = 50
+ esp.FillColor = Color3.new(1, 0.666667, 0)
+ esp.OutlineColor = Color3.new(1, 0.333333, 1)
+ esp.OutlineTransparency = 0
+ esp.Parent = v.Character
+end
+end)
+
+--// Button
+local Button = Section.NewButton("FPS boost",function()
+local decalsyeeted = true -- Leaving this on makes games look shitty but the fps goes up by at least 20.
+local g = game
+local w = g.Workspace
+local l = g.Lighting
+local t = w.Terrain
+sethiddenproperty(l,"Technology",2)
+sethiddenproperty(t,"Decoration",false)
+t.WaterWaveSize = 0
+t.WaterWaveSpeed = 0
+t.WaterReflectance = 0
+t.WaterTransparency = 0
+l.GlobalShadows = 0
+l.FogEnd = 9e9
+l.Brightness = 0
+settings().Rendering.QualityLevel = "Level01"
+for i, v in pairs(w:GetDescendants()) do
+    if v:IsA("BasePart") and not v:IsA("MeshPart") then
+        v.Material = "Plastic"
+        v.Reflectance = 0
+    elseif (v:IsA("Decal") or v:IsA("Texture")) and decalsyeeted then
+        v.Transparency = 1
+    elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
+        v.Lifetime = NumberRange.new(0)
+    elseif v:IsA("Explosion") then
+        v.BlastPressure = 1
+        v.BlastRadius = 1
+    elseif v:IsA("Fire") or v:IsA("SpotLight") or v:IsA("Smoke") or v:IsA("Sparkles") then
+        v.Enabled = false
+    elseif v:IsA("MeshPart") and decalsyeeted then
+        v.Material = "Plastic"
+        v.Reflectance = 0
+        v.TextureID = 10385902758728957
+    elseif v:IsA("SpecialMesh") and decalsyeeted  then
+        v.TextureId=0
+    elseif v:IsA("ShirtGraphic") and decalsyeeted then
+        v.Graphic=0
+    elseif (v:IsA("Shirt") or v:IsA("Pants")) and decalsyeeted then
+        v[v.ClassName.."Template"]=0
+    end
+end
+for i = 1,#l:GetChildren() do
+    e=l:GetChildren()[i]
+    if e:IsA("BlurEffect") or e:IsA("SunRaysEffect") or e:IsA("ColorCorrectionEffect") or e:IsA("BloomEffect") or e:IsA("DepthOfFieldEffect") then
+        e.Enabled = false
+    end
+end
+w.DescendantAdded:Connect(function(v)
+    wait()--prevent errors and shit
+   if v:IsA("BasePart") and not v:IsA("MeshPart") then
+        v.Material = "Plastic"
+        v.Reflectance = 0
+    elseif v:IsA("Decal") or v:IsA("Texture") and decalsyeeted then
+        v.Transparency = 1
+    elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
+        v.Lifetime = NumberRange.new(0)
+    elseif v:IsA("Explosion") then
+        v.BlastPressure = 1
+        v.BlastRadius = 1
+    elseif v:IsA("Fire") or v:IsA("SpotLight") or v:IsA("Smoke") or v:IsA("Sparkles") then
+        v.Enabled = false
+    elseif v:IsA("MeshPart") and decalsyeeted then
+        v.Material = "Plastic"
+        v.Reflectance = 0
+        v.TextureID = 10385902758728957
+    elseif v:IsA("SpecialMesh") and decalsyeeted then
+        v.TextureId=0
+    elseif v:IsA("ShirtGraphic") and decalsyeeted then
+        v.ShirtGraphic=0
+    elseif (v:IsA("Shirt") or v:IsA("Pants")) and decalsyeeted then
+        v[v.ClassName.."Template"]=0
+    end
+end)
+end)
+
+
+--// Button
+local Button = Section.NewButton("RTX mode",function()
+if not game:IsLoaded() then
+    game.Loaded:Wait()
+end
+local Bloom = Instance.new("BloomEffect")
+Bloom.Intensity = 0.1
+Bloom.Threshold = 0
+Bloom.Size = 100
+ 
+local Tropic = Instance.new("Sky")
+Tropic.Name = "Tropic"
+Tropic.SkyboxUp = "http://www.roblox.com/asset/?id=169210149"
+Tropic.SkyboxLf = "http://www.roblox.com/asset/?id=169210133"
+Tropic.SkyboxBk = "http://www.roblox.com/asset/?id=169210090"
+Tropic.SkyboxFt = "http://www.roblox.com/asset/?id=169210121"
+Tropic.StarCount = 100
+Tropic.SkyboxDn = "http://www.roblox.com/asset/?id=169210108"
+Tropic.SkyboxRt = "http://www.roblox.com/asset/?id=169210143"
+Tropic.Parent = Bloom
+ 
+local Sky = Instance.new("Sky")
+Sky.SkyboxUp = "http://www.roblox.com/asset/?id=196263782"
+Sky.SkyboxLf = "http://www.roblox.com/asset/?id=196263721"
+Sky.SkyboxBk = "http://www.roblox.com/asset/?id=196263721"
+Sky.SkyboxFt = "http://www.roblox.com/asset/?id=196263721"
+Sky.CelestialBodiesShown = false
+Sky.SkyboxDn = "http://www.roblox.com/asset/?id=196263643"
+Sky.SkyboxRt = "http://www.roblox.com/asset/?id=196263721"
+Sky.Parent = Bloom
+ 
+Bloom.Parent = game:GetService("Lighting")
+ 
+local Bloom = Instance.new("BloomEffect")
+Bloom.Enabled = false
+Bloom.Intensity = 0.35
+Bloom.Threshold = 0.2
+Bloom.Size = 56
+ 
+local Tropic = Instance.new("Sky")
+Tropic.Name = "Tropic"
+Tropic.SkyboxUp = "http://www.roblox.com/asset/?id=169210149"
+Tropic.SkyboxLf = "http://www.roblox.com/asset/?id=169210133"
+Tropic.SkyboxBk = "http://www.roblox.com/asset/?id=169210090"
+Tropic.SkyboxFt = "http://www.roblox.com/asset/?id=169210121"
+Tropic.StarCount = 100
+Tropic.SkyboxDn = "http://www.roblox.com/asset/?id=169210108"
+Tropic.SkyboxRt = "http://www.roblox.com/asset/?id=169210143"
+Tropic.Parent = Bloom
+ 
+local Sky = Instance.new("Sky")
+Sky.SkyboxUp = "http://www.roblox.com/asset/?id=196263782"
+Sky.SkyboxLf = "http://www.roblox.com/asset/?id=196263721"
+Sky.SkyboxBk = "http://www.roblox.com/asset/?id=196263721"
+Sky.SkyboxFt = "http://www.roblox.com/asset/?id=196263721"
+Sky.CelestialBodiesShown = false
+Sky.SkyboxDn = "http://www.roblox.com/asset/?id=196263643"
+Sky.SkyboxRt = "http://www.roblox.com/asset/?id=196263721"
+Sky.Parent = Bloom
+ 
+Bloom.Parent = game:GetService("Lighting")
+local Blur = Instance.new("BlurEffect")
+Blur.Size = 2
+ 
+Blur.Parent = game:GetService("Lighting")
+local Efecto = Instance.new("BlurEffect")
+Efecto.Name = "Efecto"
+Efecto.Enabled = false
+Efecto.Size = 2
+ 
+Efecto.Parent = game:GetService("Lighting")
+local Inaritaisha = Instance.new("ColorCorrectionEffect")
+Inaritaisha.Name = "Inari taisha"
+Inaritaisha.Saturation = 0.05
+Inaritaisha.TintColor = Color3.fromRGB(255, 224, 219)
+ 
+Inaritaisha.Parent = game:GetService("Lighting")
+local Normal = Instance.new("ColorCorrectionEffect")
+Normal.Name = "Normal"
+Normal.Enabled = false
+Normal.Saturation = -0.2
+Normal.TintColor = Color3.fromRGB(255, 232, 215)
+ 
+Normal.Parent = game:GetService("Lighting")
+local SunRays = Instance.new("SunRaysEffect")
+SunRays.Intensity = 0.05
+ 
+SunRays.Parent = game:GetService("Lighting")
+local Sunset = Instance.new("Sky")
+Sunset.Name = "Sunset"
+Sunset.SkyboxUp = "rbxassetid://323493360"
+Sunset.SkyboxLf = "rbxassetid://323494252"
+Sunset.SkyboxBk = "rbxassetid://323494035"
+Sunset.SkyboxFt = "rbxassetid://323494130"
+Sunset.SkyboxDn = "rbxassetid://323494368"
+Sunset.SunAngularSize = 14
+Sunset.SkyboxRt = "rbxassetid://323494067"
+ 
+Sunset.Parent = game:GetService("Lighting")
+local Takayama = Instance.new("ColorCorrectionEffect")
+Takayama.Name = "Takayama"
+Takayama.Enabled = false
+Takayama.Saturation = -0.3
+Takayama.Contrast = 0.1
+Takayama.TintColor = Color3.fromRGB(235, 214, 204)
+ 
+Takayama.Parent = game:GetService("Lighting")
+local L = game:GetService("Lighting")
+L.Brightness = 2.14
+L.ColorShift_Bottom = Color3.fromRGB(11, 0, 20)
+L.ColorShift_Top = Color3.fromRGB(240, 127, 14)
+L.OutdoorAmbient = Color3.fromRGB(34, 0, 49)
+L.ClockTime = 6.7
+L.FogColor = Color3.fromRGB(94, 76, 106)
+L.FogEnd = 1000
+L.FogStart = 0
+L.ExposureCompensation = 0.24
+L.ShadowSoftness = 0
+L.Ambient = Color3.fromRGB(59, 33, 27)
+ 
+local Bloom = Instance.new("BloomEffect")
+Bloom.Intensity = 0.1
+Bloom.Threshold = 0
+Bloom.Size = 100
+ 
+local Tropic = Instance.new("Sky")
+Tropic.Name = "Tropic"
+Tropic.SkyboxUp = "http://www.roblox.com/asset/?id=169210149"
+Tropic.SkyboxLf = "http://www.roblox.com/asset/?id=169210133"
+Tropic.SkyboxBk = "http://www.roblox.com/asset/?id=169210090"
+Tropic.SkyboxFt = "http://www.roblox.com/asset/?id=169210121"
+Tropic.StarCount = 100
+Tropic.SkyboxDn = "http://www.roblox.com/asset/?id=169210108"
+Tropic.SkyboxRt = "http://www.roblox.com/asset/?id=169210143"
+Tropic.Parent = Bloom
+ 
+local Sky = Instance.new("Sky")
+Sky.SkyboxUp = "http://www.roblox.com/asset/?id=196263782"
+Sky.SkyboxLf = "http://www.roblox.com/asset/?id=196263721"
+Sky.SkyboxBk = "http://www.roblox.com/asset/?id=196263721"
+Sky.SkyboxFt = "http://www.roblox.com/asset/?id=196263721"
+Sky.CelestialBodiesShown = false
+Sky.SkyboxDn = "http://www.roblox.com/asset/?id=196263643"
+Sky.SkyboxRt = "http://www.roblox.com/asset/?id=196263721"
+Sky.Parent = Bloom
+ 
+Bloom.Parent = game:GetService("Lighting")
+ 
+local Bloom = Instance.new("BloomEffect")
+Bloom.Enabled = false
+Bloom.Intensity = 0.35
+Bloom.Threshold = 0.2
+Bloom.Size = 56
+ 
+local Tropic = Instance.new("Sky")
+Tropic.Name = "Tropic"
+Tropic.SkyboxUp = "http://www.roblox.com/asset/?id=169210149"
+Tropic.SkyboxLf = "http://www.roblox.com/asset/?id=169210133"
+Tropic.SkyboxBk = "http://www.roblox.com/asset/?id=169210090"
+Tropic.SkyboxFt = "http://www.roblox.com/asset/?id=169210121"
+Tropic.StarCount = 100
+Tropic.SkyboxDn = "http://www.roblox.com/asset/?id=169210108"
+Tropic.SkyboxRt = "http://www.roblox.com/asset/?id=169210143"
+Tropic.Parent = Bloom
+ 
+local Sky = Instance.new("Sky")
+Sky.SkyboxUp = "http://www.roblox.com/asset/?id=196263782"
+Sky.SkyboxLf = "http://www.roblox.com/asset/?id=196263721"
+Sky.SkyboxBk = "http://www.roblox.com/asset/?id=196263721"
+Sky.SkyboxFt = "http://www.roblox.com/asset/?id=196263721"
+Sky.CelestialBodiesShown = false
+Sky.SkyboxDn = "http://www.roblox.com/asset/?id=196263643"
+Sky.SkyboxRt = "http://www.roblox.com/asset/?id=196263721"
+Sky.Parent = Bloom
+ 
+Bloom.Parent = game:GetService("Lighting")
+local Blur = Instance.new("BlurEffect")
+Blur.Size = 2
+ 
+Blur.Parent = game:GetService("Lighting")
+local Efecto = Instance.new("BlurEffect")
+Efecto.Name = "Efecto"
+Efecto.Enabled = false
+Efecto.Size = 2
+ 
+Efecto.Parent = game:GetService("Lighting")
+local Inaritaisha = Instance.new("ColorCorrectionEffect")
+Inaritaisha.Name = "Inari taisha"
+Inaritaisha.Saturation = 0.05
+Inaritaisha.TintColor = Color3.fromRGB(255, 224, 219)
+ 
+Inaritaisha.Parent = game:GetService("Lighting")
+local Normal = Instance.new("ColorCorrectionEffect")
+Normal.Name = "Normal"
+Normal.Enabled = false
+Normal.Saturation = -0.2
+Normal.TintColor = Color3.fromRGB(255, 232, 215)
+ 
+Normal.Parent = game:GetService("Lighting")
+local SunRays = Instance.new("SunRaysEffect")
+SunRays.Intensity = 0.05
+ 
+SunRays.Parent = game:GetService("Lighting")
+local Sunset = Instance.new("Sky")
+Sunset.Name = "Sunset"
+Sunset.SkyboxUp = "rbxassetid://323493360"
+Sunset.SkyboxLf = "rbxassetid://323494252"
+Sunset.SkyboxBk = "rbxassetid://323494035"
+Sunset.SkyboxFt = "rbxassetid://323494130"
+Sunset.SkyboxDn = "rbxassetid://323494368"
+Sunset.SunAngularSize = 14
+Sunset.SkyboxRt = "rbxassetid://323494067"
+ 
+Sunset.Parent = game:GetService("Lighting")
+local Takayama = Instance.new("ColorCorrectionEffect")
+Takayama.Name = "Takayama"
+Takayama.Enabled = false
+Takayama.Saturation = -0.3
+Takayama.Contrast = 0.1
+Takayama.TintColor = Color3.fromRGB(235, 214, 204)
+ 
+Takayama.Parent = game:GetService("Lighting")
+local L = game:GetService("Lighting")
+L.Brightness = 2.14
+L.ColorShift_Bottom = Color3.fromRGB(11, 0, 20)
+L.ColorShift_Top = Color3.fromRGB(240, 127, 14)
+L.OutdoorAmbient = Color3.fromRGB(34, 0, 49)
+L.ClockTime = 6.7
+L.FogColor = Color3.fromRGB(94, 76, 106)
+L.FogEnd = 1000
+L.FogStart = 0
+L.ExposureCompensation = 0.24
+L.ShadowSoftness = 0
+L.Ambient = Color3.fromRGB(59, 33, 27)
+ 
+ 
+ 
+end)
+
+
+
+--// Button
+local Button = Section.NewButton("Full Bright",function()
+if not _G.FullBrightExecuted then
+
+	_G.FullBrightEnabled = false
+
+	_G.NormalLightingSettings = {
+		Brightness = game:GetService("Lighting").Brightness,
+		ClockTime = game:GetService("Lighting").ClockTime,
+		FogEnd = game:GetService("Lighting").FogEnd,
+		GlobalShadows = game:GetService("Lighting").GlobalShadows,
+		Ambient = game:GetService("Lighting").Ambient
+	}
+
+	game:GetService("Lighting"):GetPropertyChangedSignal("Brightness"):Connect(function()
+		if game:GetService("Lighting").Brightness ~= 1 and game:GetService("Lighting").Brightness ~= _G.NormalLightingSettings.Brightness then
+			_G.NormalLightingSettings.Brightness = game:GetService("Lighting").Brightness
+			if not _G.FullBrightEnabled then
+				repeat
+					wait()
+				until _G.FullBrightEnabled
+			end
+			game:GetService("Lighting").Brightness = 1
+		end
+	end)
+
+	game:GetService("Lighting"):GetPropertyChangedSignal("ClockTime"):Connect(function()
+		if game:GetService("Lighting").ClockTime ~= 12 and game:GetService("Lighting").ClockTime ~= _G.NormalLightingSettings.ClockTime then
+			_G.NormalLightingSettings.ClockTime = game:GetService("Lighting").ClockTime
+			if not _G.FullBrightEnabled then
+				repeat
+					wait()
+				until _G.FullBrightEnabled
+			end
+			game:GetService("Lighting").ClockTime = 12
+		end
+	end)
+
+	game:GetService("Lighting"):GetPropertyChangedSignal("FogEnd"):Connect(function()
+		if game:GetService("Lighting").FogEnd ~= 786543 and game:GetService("Lighting").FogEnd ~= _G.NormalLightingSettings.FogEnd then
+			_G.NormalLightingSettings.FogEnd = game:GetService("Lighting").FogEnd
+			if not _G.FullBrightEnabled then
+				repeat
+					wait()
+				until _G.FullBrightEnabled
+			end
+			game:GetService("Lighting").FogEnd = 786543
+		end
+	end)
+
+	game:GetService("Lighting"):GetPropertyChangedSignal("GlobalShadows"):Connect(function()
+		if game:GetService("Lighting").GlobalShadows ~= false and game:GetService("Lighting").GlobalShadows ~= _G.NormalLightingSettings.GlobalShadows then
+			_G.NormalLightingSettings.GlobalShadows = game:GetService("Lighting").GlobalShadows
+			if not _G.FullBrightEnabled then
+				repeat
+					wait()
+				until _G.FullBrightEnabled
+			end
+			game:GetService("Lighting").GlobalShadows = false
+		end
+	end)
+
+	game:GetService("Lighting"):GetPropertyChangedSignal("Ambient"):Connect(function()
+		if game:GetService("Lighting").Ambient ~= Color3.fromRGB(178, 178, 178) and game:GetService("Lighting").Ambient ~= _G.NormalLightingSettings.Ambient then
+			_G.NormalLightingSettings.Ambient = game:GetService("Lighting").Ambient
+			if not _G.FullBrightEnabled then
+				repeat
+					wait()
+				until _G.FullBrightEnabled
+			end
+			game:GetService("Lighting").Ambient = Color3.fromRGB(178, 178, 178)
+		end
+	end)
+
+	game:GetService("Lighting").Brightness = 1
+	game:GetService("Lighting").ClockTime = 12
+	game:GetService("Lighting").FogEnd = 786543
+	game:GetService("Lighting").GlobalShadows = false
+	game:GetService("Lighting").Ambient = Color3.fromRGB(178, 178, 178)
+
+	local LatestValue = true
+	spawn(function()
+		repeat
+			wait()
+		until _G.FullBrightEnabled
+		while wait() do
+			if _G.FullBrightEnabled ~= LatestValue then
+				if not _G.FullBrightEnabled then
+					game:GetService("Lighting").Brightness = _G.NormalLightingSettings.Brightness
+					game:GetService("Lighting").ClockTime = _G.NormalLightingSettings.ClockTime
+					game:GetService("Lighting").FogEnd = _G.NormalLightingSettings.FogEnd
+					game:GetService("Lighting").GlobalShadows = _G.NormalLightingSettings.GlobalShadows
+					game:GetService("Lighting").Ambient = _G.NormalLightingSettings.Ambient
+				else
+					game:GetService("Lighting").Brightness = 1
+					game:GetService("Lighting").ClockTime = 12
+					game:GetService("Lighting").FogEnd = 786543
+					game:GetService("Lighting").GlobalShadows = false
+					game:GetService("Lighting").Ambient = Color3.fromRGB(178, 178, 178)
+				end
+				LatestValue = not LatestValue
+			end
+		end
+	end)
+end
+
+_G.FullBrightExecuted = true
+_G.FullBrightEnabled = not _G.FullBrightEnabled
+end)
